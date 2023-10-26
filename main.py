@@ -2,7 +2,7 @@ import networkx as nx
 from funcoes import *
 import matplotlib.pyplot as plt
 
-arquivo_graphml = "./teste03.graphml"
+arquivo_graphml = "./Arquivos/exemplo_BuscaLargura_Slide.graphml"
 
 grafo = nx.read_graphml(arquivo_graphml)
 opcao = -1
@@ -84,9 +84,11 @@ while opcao != 0:
         print("\n")
     
     elif opcao == 10:
-        vertice_fornecido = input("Digite o vértice: ")
-        sequencia_de_vertices_visitados, arestas_nao_arvore, arvore_busca = determinar_sequencia_de_vertices_visitados_na_busca_em_largura(grafo, vertice_fornecido)
-        print(f"Sequência de vértices visitados na busca em largura a partir do vértice {vertice_fornecido}: {sequencia_de_vertices_visitados}\nE as arestas que não fazem parte da árvore são:{arestas_nao_arvore}")
+        vertice_inicial = input("Digite o vértice inicial: ")
+        arvore_busca, arestas_nao_arvore, sequencia_vertices = busca_em_largura_com_arvore(grafo, vertice_inicial)
+        
+        print("Sequência de vértices visitados na busca em largura:", sequencia_vertices)
+        print("Arestas que não fazem parte da árvore de busca em largura:", arestas_nao_arvore)
         nx.write_graphml(arvore_busca, "arvore_busca.graphml")
         
         criaLayout = input("Deseja criar um layout para a árvore de busca? (S/N) ")

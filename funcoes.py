@@ -19,89 +19,43 @@ def calcular_sequencia_de_graus(grafo):
     return sequencia_de_graus
 
 def determinar_excentricidade_do_vertice(grafo, vertice):
-    excentricidades = []
-
-    for outro_vertice in grafo.nodes():
-        if outro_vertice != vertice:
-            try:
-                excentricidade = nx.shortest_path_length(grafo, source=vertice, target=outro_vertice)
-                excentricidades.append(excentricidade)
-            except nx.NetworkXNoPath:
-                # Se não houver caminho entre os vértices, a excentricidade é infinita
-                excentricidades.append(float('inf'))
-
-    return max(excentricidades)
+    excentricidades = nx.single_source_shortest_path_length(grafo, source=vertice)
+    excentricidade = max(excentricidades.values())
+    return excentricidade
 
 def determinar_raio_do_grafo(grafo):
-    componentes_conectadas = list(nx.connected_components(grafo))
-    menor_raio = float('inf')  # Inicializa com infinito para encontrar o mínimo
-
-    for componente in componentes_conectadas:
-        subgrafo = grafo.subgraph(componente)
-        raio_componente = nx.radius(subgrafo)
-        menor_raio = min(menor_raio, raio_componente)
-
-    return menor_raio
+    raio = nx.radius(grafo)
+    return raio
 
 def determinar_diametro_do_grafo(grafo):
-    if not nx.is_connected(grafo):
-        componentes_conectadas = list(nx.connected_components(grafo))
-        diametros = []
-
-        for componente in componentes_conectadas:
-            subgrafo = grafo.subgraph(componente)
-            if len(subgrafo) > 1:
-                diametro_componente = nx.diameter(subgrafo)
-                diametros.append(diametro_componente)
-
-        if diametros:
-            return max(diametros)
-        else:
-            return 0
-    else:
-        return nx.diameter(grafo)
+    diametro_do_grafo = nx.diameter(grafo)
+    return diametro_do_grafo
 
 def determinar_centro_do_grafo(grafo):
-    if not nx.is_connected(grafo):
-        componentes_conectadas = list(nx.connected_components(grafo))
-        print(componentes_conectadas)
-        menor_excentricidade = float('+inf')
-        centro = set()
-
-        for componente in componentes_conectadas:
-            subgrafo = grafo.subgraph(componente)
-            excentricidade = nx.eccentricity(subgrafo)
-            menor_excentricidade_componente = min(excentricidade.values())
-
-            if menor_excentricidade_componente < menor_excentricidade:
-                menor_excentricidade = menor_excentricidade_componente
-                centro = set(vertice for vertice in excentricidade if excentricidade[vertice] == menor_excentricidade)
-
-        return centro
-    else:
-        excentricidade = nx.eccentricity(grafo)
-        raio = min(excentricidade.values())
-        return {vertice for vertice, excentricidade in excentricidade.items() if excentricidade == raio}
+    centro_do_grafo = nx.center(grafo)
+    return centro_do_grafo
 
 
-def determinar_sequencia_de_vertices_visitados_na_busca_em_largura(grafo, vertice):
+def busca_em_largura_com_arvore(grafo, vertice_inicial):
     arvore_busca = nx.Graph()
-    fila = [vertice]
-    visitados = set()
+    fila = [vertice_inicial]
+    visitados = set(fila)
     sequencia_vertices = []  # Para armazenar a sequência de vértices visitados
 
     while fila:
         vertice_atual = fila.pop(0)
-        visitados.add(vertice_atual)
         sequencia_vertices.append(vertice_atual)  # Adiciona o vértice atual à sequência
 
         for vizinho in grafo.neighbors(vertice_atual):
             if vizinho not in visitados:
+                visitados.add(vizinho)
                 fila.append(vizinho)
                 arvore_busca.add_edge(vertice_atual, vizinho)
 
+    # Arestas que não fazem parte da árvore de busca em largura
     arestas_nao_arvore = list(set(grafo.edges()) - set(arvore_busca.edges()))
-    return sequencia_vertices, arestas_nao_arvore, arvore_busca
+
+    return arvore_busca, arestas_nao_arvore, sequencia_vertices
 
 def determinar_distancia_entre_dois_vertices(grafo, vertice_origem, vertice_destino):
     distancia = nx.shortest_path_length(grafo, source=vertice_origem, target=vertice_destino)
