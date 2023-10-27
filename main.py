@@ -2,13 +2,28 @@ import networkx as nx
 from funcoes import *
 import matplotlib.pyplot as plt
 
-arquivo_graphml = "./Arquivos/exemplo_BuscaLargura_Slide.graphml"
+# arquivo_graphml = "./Arquivos/exemplo_BuscaLargura_Slide.graphml"
 
-grafo = nx.read_graphml(arquivo_graphml)
-opcao = -1
+# grafo = nx.read_graphml(arquivo_graphml)
+# opcao = -1
 
-# Cria um layout para o grafo
-pos = nx.planar_layout(grafo)
+# pos = nx.planar_layout(grafo)
+
+arq = "./Arquivos/"
+arquivo = input("Digite o nome do arquivo do grafo: ")
+arquivo_graphml = arq + arquivo
+
+try:
+    grafo = nx.read_graphml(arquivo_graphml)
+    opcao = -1
+
+    # Cria um layout para o grafo
+    pos = nx.planar_layout(grafo)
+
+except (IOError, FileNotFoundError) as e:
+    print(f"Erro na leitura do arquivo: {e}")
+
+
 
 nx.draw(grafo, pos, with_labels=True, node_color='skyblue', node_size=1500, font_size=10, font_weight='bold')
 plt.title("Grafo Lido do Arquivo GraphML")
