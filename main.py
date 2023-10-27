@@ -26,8 +26,10 @@ except (IOError, FileNotFoundError) as e:
 
 
 nx.draw(grafo, pos, with_labels=True, node_color='skyblue', node_size=1500, font_size=10, font_weight='bold')
+
 plt.title("Grafo Lido do Arquivo GraphML")
 plt.axis('on')
+
 plt.show()
 
 while opcao != 0:
