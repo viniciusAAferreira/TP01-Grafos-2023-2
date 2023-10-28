@@ -23,7 +23,10 @@ try:
 except (IOError, FileNotFoundError) as e:
     print(f"Erro na leitura do arquivo: {e}")
 
-
+for u, v, data in grafo.edges(data=True):
+    grafo.add_edge(u, v, weight = 2)
+    weight = data.get("weight")
+    print(f"Aresta ({u}, {v}): Peso {weight}")
 
 nx.draw(grafo, pos, with_labels=True, node_color='skyblue', node_size=1500, font_size=10, font_weight='bold')
 edge_labels = nx.get_edge_attributes(grafo, "weight")
@@ -35,6 +38,7 @@ ax.margins(0.08)
 plt.axis("off")
 plt.tight_layout()
 plt.show()
+
 
 while opcao != 0:
     print("#############################################")
