@@ -58,9 +58,9 @@ def busca_em_largura_com_arvore(grafo, vertice_inicial):
     return arvore_busca, arestas_nao_arvore, sequencia_vertices
 
 def determinar_distancia_entre_dois_vertices(grafo, vertice_origem, vertice_destino):
-    distancia = nx.shortest_path_length(grafo, source=vertice_origem, target=vertice_destino)
+    distancia = nx.shortest_path_length(grafo, source=vertice_origem, target=vertice_destino, weight='weight')
     
-    caminho_minimo = nx.shortest_path(grafo, source=vertice_origem, target=vertice_destino)
+    caminho_minimo = nx.shortest_path(grafo, source=vertice_origem, target=vertice_destino, weight='weight')
 
     return distancia, caminho_minimo
 

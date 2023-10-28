@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 arq = "./Arquivos/"
 arquivo = input("Digite o nome do arquivo do grafo: ")
-arquivo_graphml = arq + arquivo
+arquivo_graphml = arq + arquivo + '.graphml'
 
 try:
     grafo = nx.read_graphml(arquivo_graphml)
@@ -26,10 +26,14 @@ except (IOError, FileNotFoundError) as e:
 
 
 nx.draw(grafo, pos, with_labels=True, node_color='skyblue', node_size=1500, font_size=10, font_weight='bold')
+edge_labels = nx.get_edge_attributes(grafo, "weight")
+nx.draw_networkx_edge_labels(grafo, pos, edge_labels)
 
 plt.title("Grafo Lido do Arquivo GraphML")
-plt.axis('on')
-
+ax = plt.gca()
+ax.margins(0.08)
+plt.axis("off")
+plt.tight_layout()
 plt.show()
 
 while opcao != 0:
